@@ -19,28 +19,28 @@
 
         header {
             background: linear-gradient(135deg, #6e8efb, #a777e3);
-            padding: 20px;
+            padding: 15px 20px;
             text-align: center;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
 
         header h1 {
             color: white;
-            font-size: 2.5em;
-            margin-bottom: 10px;
+            font-size: 2em;
         }
 
         .nav-links {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 15px;
+            margin-top: 10px;
         }
 
         .nav-links a {
             color: white;
             text-decoration: none;
-            font-size: 1.2em;
-            padding: 8px 15px;
+            font-size: 1.1em;
+            padding: 8px 12px;
             border-radius: 5px;
             transition: background-color 0.3s;
         }
@@ -51,37 +51,44 @@
 
         .products {
             max-width: 1200px;
-            margin: 30px auto;
+            margin: 20px auto;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            padding: 0 20px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            padding: 0 15px;
         }
 
         .product-card {
             background: white;
             border-radius: 10px;
-            padding: 20px;
+            padding: 15px;
             text-align: center;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
+            animation: fadeIn 0.5s ease-out;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .product-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
         }
 
         .product-card img {
             width: 100%;
-            height: 200px;
+            height: 180px;
             background: #eee;
             border-radius: 5px;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
         .product-card h3 {
-            font-size: 1.5em;
-            margin-bottom: 10px;
+            font-size: 1.3em;
+            margin-bottom: 8px;
         }
 
         .product-card p {
@@ -93,7 +100,7 @@
             background: #6e8efb;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 8px 15px;
             border-radius: 5px;
             cursor: pointer;
             transition: background 0.3s;
@@ -105,31 +112,34 @@
 
         .cart-button {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: 15px;
+            right: 15px;
             background: #ff6b6b;
             color: white;
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
             cursor: pointer;
-            font-size: 1.5em;
+            font-size: 1.3em;
+            z-index: 1000;
         }
 
         .cart {
             position: fixed;
             top: 0;
             right: -100%;
-            width: 350px;
+            width: 100%;
+            max-width: 350px;
             height: 100%;
             background: white;
             box-shadow: -2px 0 5px rgba(0,0,0,0.2);
-            padding: 20px;
+            padding: 15px;
             transition: right 0.3s;
+            z-index: 1000;
         }
 
         .cart.active {
@@ -137,14 +147,23 @@
         }
 
         .cart h2 {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close-btn {
+            cursor: pointer;
+            font-size: 1.5em;
+            color: #666;
         }
 
         .cart-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 0;
+            padding: 8px 0;
             border-bottom: 1px solid #eee;
         }
 
@@ -154,8 +173,8 @@
         }
 
         .cart-total {
-            margin-top: 20px;
-            font-size: 1.2em;
+            margin-top: 15px;
+            font-size: 1.1em;
             font-weight: bold;
         }
 
@@ -167,7 +186,7 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            margin-top: 20px;
+            margin-top: 15px;
         }
 
         .checkout {
@@ -177,11 +196,13 @@
             left: 50%;
             transform: translate(-50%, -50%);
             background: white;
-            padding: 20px;
+            padding: 15px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.3);
-            max-width: 400px;
+            max-width: 90%;
+            width: 400px;
             text-align: center;
+            z-index: 1000;
         }
 
         .checkout.active {
@@ -189,18 +210,50 @@
         }
 
         .checkout h2 {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        footer {
-            background: #333;
-            color: white;
-            text-align: center;
-            padding: 15px;
-            position: relative;
-            bottom: 0;
+        .send-photo-btn {
             width: 100%;
-            margin-top: 30px;
+            padding: 10px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 15px 0;
+        }
+
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 1.5em;
+            }
+
+            .nav-links a {
+                font-size: 0.9em;
+                padding: 6px 10px;
+            }
+
+            .products {
+                grid-template-columns: 1fr;
+                padding: 0 10px;
+            }
+
+            .product-card img {
+                height: 150px;
+            }
+
+            .cart {
+                width: 100%;
+                max-width: none;
+            }
+
+            .checkout {
+                width: 90%;
+            }
         }
     </style>
 </head>
@@ -231,23 +284,20 @@
     <div class="cart-button" onclick="openCart()">🛒</div>
 
     <div class="cart">
-        <h2>Корзина</h2>
+        <h2>Корзина <span class="close-btn" onclick="openCart()">✕</span></h2>
         <div id="cart-items"></div>
         <div class="cart-total">Итого: <span id="total">0 ₽</span></div>
         <button class="checkout-btn" onclick="showCheckout()">Оформить заказ</button>
     </div>
 
     <div class="checkout">
-        <h2>Чек заказа</h2>
+        <h2>Чек заказа <span class="close-btn" onclick="closeCheckout()">✕</span></h2>
         <div id="checkout-items"></div>
         <div class="cart-total">Итого: <span id="checkout-total">0 ₽</span></div>
         <p>Номер заказа: <span id="order-number"></span></p>
-        <p style="margin-top: 20px; font-weight: bold;">Чтобы оформить заказ, скиньте фотографию (скриншот) данного чека с номером заказа и содержанием товаров.</p>
+        <button class="send-photo-btn">Отправить фотографию</button>
+        <p style="margin-top: 10px; font-weight: bold;">При сделанном скриншоте чека заказа, нажмите на кнопку сверху и отправьте скриншот в личные сообщения продавца. После с вами свяжется продавец.</p>
     </div>
-
-    <footer>
-        <p>Все права защищены &copy; Toys3DPrint 2025</p>
-    </footer>
 
     <script>
         let cart = [];
@@ -316,6 +366,10 @@
             document.getElementById('checkout-total').textContent = `${total} ₽`;
             document.getElementById('order-number').textContent = `№${Math.floor(Math.random() * 1000000)}`;
             document.querySelector('.checkout').classList.add('active');
+        }
+
+        function closeCheckout() {
+            document.querySelector('.checkout').classList.remove('active');
         }
     </script>
 </body>
