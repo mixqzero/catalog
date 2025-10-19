@@ -106,8 +106,16 @@
             transition: background 0.3s;
         }
 
+        .product-card button.added {
+            background: #28a745;
+        }
+
         .product-card button:hover {
             background: #5a7be0;
+        }
+
+        .product-card button.added:hover {
+            background: #218838;
         }
 
         .cart-button {
@@ -138,12 +146,27 @@
             background: white;
             box-shadow: -2px 0 5px rgba(0,0,0,0.2);
             padding: 15px;
-            transition: right 0.3s;
+            transition: right 0.3s ease-in-out;
             z-index: 1000;
+            animation: slideIn 0.3s ease-out forwards;
+        }
+
+        @keyframes slideIn {
+            from { right: -100%; }
+            to { right: 0; }
         }
 
         .cart.active {
             right: 0;
+        }
+
+        .cart:not(.active) {
+            animation: slideOut 0.3s ease-out forwards;
+        }
+
+        @keyframes slideOut {
+            from { right: 0; }
+            to { right: -100%; }
         }
 
         .cart h2 {
@@ -167,9 +190,35 @@
             border-bottom: 1px solid #eee;
         }
 
-        .cart-item input {
-            width: 50px;
+        .cart-item .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .cart-item .quantity-controls button {
+            background: #ddd;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+        .cart-item .quantity-controls button:hover {
+            background: #ccc;
+        }
+
+        .cart-item .delete-btn {
+            background: #ff4444;
+            color: white;
+            border: none;
             padding: 5px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+        .cart-item .delete-btn:hover {
+            background: #cc0000;
         }
 
         .cart-total {
@@ -203,6 +252,12 @@
             width: 400px;
             text-align: center;
             z-index: 1000;
+            animation: popIn 0.3s ease-out;
+        }
+
+        @keyframes popIn {
+            from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+            to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
         }
 
         .checkout.active {
@@ -271,13 +326,13 @@
             <img src="#" alt="Яйцо-Головоломка">
             <h3>Яйцо-Головоломка</h3>
             <p>400 ₽</p>
-            <button onclick="addToCart('Яйцо-Головоломка', 400)">Добавить в корзину</button>
+            <button id="btn-Яйцо-Головоломка" onclick="addToCart('Яйцо-Головоломка', 400)">Добавить в корзину</button>
         </div>
         <div class="product-card">
             <img src="#" alt="Крестики-нолики">
             <h3>Крестики-нолики</h3>
             <p>600 ₽</p>
-            <button onclick="addToCart('Крестики-нолики', 600)">Добавить в корзину</button>
+            <button id="btn-Крестики-нолики" onclick="addToCart('Крестики-нолики', 600)">Добавить в корзину</button>
         </div>
     </main>
 
@@ -310,6 +365,19 @@
                 cart.push({ name, price, quantity: 1 });
             }
             updateCart();
+            updateButton(name);
+        }
+
+        function updateButton(name) {
+            const button = document.getElementById(`btn-${name}`);
+            const item = cart.find(item => item.name === name);
+            if (item && item.quantity > 0) {
+                button.classList.add('added');
+                button.innerHTML = `Добавлено в корзину &lt; ${item.quantity} &gt;`;
+            } else {
+                button.classList.remove('added');
+                button.innerHTML = 'Добавить в корзину';
+            }
         }
 
         function updateCart() {
@@ -323,12 +391,18 @@
                 itemElement.className = 'cart-item';
                 itemElement.innerHTML = `
                     <span>${item.name} - ${item.price} ₽</span>
-                    <input type="number" min="1" value="${item.quantity}" onchange="updateQuantity('${item.name}', this.value)">
+                    <div class="quantity-controls">
+                        <button onclick="updateQuantity('${item.name}', ${item.quantity - 1})">&lt;</button>
+                        <input type="number" min="1" value="${item.quantity}" onchange="updateQuantity('${item.name}', this.value)">
+                        <button onclick="updateQuantity('${item.name}', ${item.quantity + 1})">&gt;</button>
+                        <button class="delete-btn" onclick="deleteItem('${item.name}')">🗑</button>
+                    </div>
                 `;
                 cartItems.appendChild(itemElement);
             });
 
             document.getElementById('total').textContent = `${total} ₽`;
+            cart.forEach(item => updateButton(item.name));
         }
 
         function updateQuantity(name, quantity) {
@@ -336,10 +410,16 @@
             if (item) {
                 item.quantity = parseInt(quantity);
                 if (item.quantity <= 0) {
-                    cart = cart.filter(i => i.name !== name);
+                    deleteItem(name);
+                } else {
+                    updateCart();
                 }
-                updateCart();
             }
+        }
+
+        function deleteItem(name) {
+            cart = cart.filter(item => item.name !== name);
+            updateCart();
         }
 
         function openCart() {
