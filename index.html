@@ -3,274 +3,320 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Модельки - Магазин</title>
+    <title>Toys3DPrint</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        * {
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f0f2f5;
+            color: #333;
         }
 
         header {
-            background-color: #333;
-            color: #fff;
-            padding: 1em 0;
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            padding: 20px;
             text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
 
-        .container {
-            max-width: 960px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
+        header h1 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.2em;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-links a:hover {
+            background-color: rgba(255,255,255,0.2);
         }
 
         .products {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
+            max-width: 1200px;
+            margin: 30px auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 0 20px;
         }
 
         .product-card {
-            width: 250px;
-            margin: 15px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
             text-align: center;
-            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
         }
 
         .product-card img {
-            max-width: 100%;
-            height: auto;
+            width: 100%;
+            height: 200px;
+            background: #eee;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        .product-card h3 {
+            font-size: 1.5em;
             margin-bottom: 10px;
-            border-radius: 4px;
+        }
+
+        .product-card p {
+            color: #666;
+            margin-bottom: 10px;
         }
 
         .product-card button {
-            background-color: #4CAF50;
+            background: #6e8efb;
             color: white;
-            padding: 10px 15px;
             border: none;
-            border-radius: 4px;
+            padding: 10px 20px;
+            border-radius: 5px;
             cursor: pointer;
+            transition: background 0.3s;
         }
 
         .product-card button:hover {
-            background-color: #3e8e41;
+            background: #5a7be0;
         }
 
-        #cart-container {
-            margin-top: 20px;
-            border-top: 1px solid #ccc;
-            padding-top: 20px;
+        .cart-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #ff6b6b;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            cursor: pointer;
+            font-size: 1.5em;
         }
 
-        #cart-items {
-            list-style: none;
-            padding: 0;
+        .cart {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 350px;
+            height: 100%;
+            background: white;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.2);
+            padding: 20px;
+            transition: right 0.3s;
         }
 
-        #cart-items li {
-            padding: 10px 0;
-            border-bottom: 1px solid #eee;
+        .cart.active {
+            right: 0;
+        }
+
+        .cart h2 {
+            margin-bottom: 20px;
+        }
+
+        .cart-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
         }
 
-        #cart-items li:last-child {
-            border-bottom: none;
+        .cart-item input {
+            width: 50px;
+            padding: 5px;
         }
 
-        .quantity-controls {
-            display: flex;
-            align-items: center;
+        .cart-total {
+            margin-top: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
         }
 
-        .quantity-controls button {
-            background-color: #f0f0f0;
-            border: 1px solid #ccc;
-            padding: 5px 10px;
+        .checkout-btn {
+            width: 100%;
+            padding: 10px;
+            background: #6e8efb;
+            color: white;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
-            border-radius: 4px;
+            margin-top: 20px;
         }
 
-        .quantity-controls input[type="number"] {
-            width: 40px;
+        .checkout {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+            max-width: 400px;
             text-align: center;
-            margin: 0 5px;
+        }
+
+        .checkout.active {
+            display: block;
+        }
+
+        .checkout h2 {
+            margin-bottom: 20px;
+        }
+
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            margin-top: 30px;
         }
     </style>
 </head>
 <body>
-
     <header>
-        <h1>3D Модельки - Магазин</h1>
+        <h1>Toys3DPrint</h1>
+        <div class="nav-links">
+            <a href="#" onclick="openCart()">Корзина</a>
+            <a href="#contacts">Контакты</a>
+        </div>
     </header>
 
-    <div class="container">
-
-        <div class="products">
-            <!-- Пример карточек товаров -->
-            <div class="product-card" data-id="1" data-name="Котёнок" data-price="10">
-                <img src="https://via.placeholder.com/200x150/808080/FFFFFF?text=Котёнок" alt="Котёнок">
-                <h3>Котёнок</h3>
-                <p>Цена: $10</p>
-                <button class="add-to-cart">Добавить в корзину</button>
-            </div>
-
-            <div class="product-card" data-id="2" data-name="Динозавр" data-price="15">
-                <img src="https://via.placeholder.com/200x150/808080/FFFFFF?text=Динозавр" alt="Динозавр">
-                <h3>Динозавр</h3>
-                <p>Цена: $15</p>
-                <button class="add-to-cart">Добавить в корзину</button>
-            </div>
-
-            <div class="product-card" data-id="3" data-name="Робот" data-price="20">
-                <img src="https://via.placeholder.com/200x150/808080/FFFFFF?text=Робот" alt="Робот">
-                <h3>Робот</h3>
-                <p>Цена: $20</p>
-                <button class="add-to-cart">Добавить в корзину</button>
-            </div>
-
-            <div class="product-card" data-id="4" data-name="Космонавт" data-price="18">
-                <img src="https://via.placeholder.com/200x150/808080/FFFFFF?text=Космонавт" alt="Космонавт">
-                <h3>Космонавт</h3>
-                <p>Цена: $18</p>
-                <button class="add-to-cart">Добавить в корзину</button>
-            </div>
-            <!-- Добавьте больше карточек товаров по аналогии -->
+    <main class="products">
+        <div class="product-card">
+            <img src="#" alt="Яйцо-Головоломка">
+            <h3>Яйцо-Головоломка</h3>
+            <p>400 ₽</p>
+            <button onclick="addToCart('Яйцо-Головоломка', 400)">Добавить в корзину</button>
         </div>
-
-        <div id="cart-container">
-            <h2>Корзина</h2>
-            <ul id="cart-items">
-                <!-- Здесь будут отображаться добавленные товары -->
-            </ul>
-            <p>Общая стоимость: <span id="total-price">0</span>$</p>
+        <div class="product-card">
+            <img src="#" alt="Крестики-нолики">
+            <h3>Крестики-нолики</h3>
+            <p>600 ₽</p>
+            <button onclick="addToCart('Крестики-нолики', 600)">Добавить в корзину</button>
         </div>
+    </main>
+
+    <div class="cart-button" onclick="openCart()">🛒</div>
+
+    <div class="cart">
+        <h2>Корзина</h2>
+        <div id="cart-items"></div>
+        <div class="cart-total">Итого: <span id="total">0 ₽</span></div>
+        <button class="checkout-btn" onclick="showCheckout()">Оформить заказ</button>
     </div>
 
+    <div class="checkout">
+        <h2>Чек заказа</h2>
+        <div id="checkout-items"></div>
+        <div class="cart-total">Итого: <span id="checkout-total">0 ₽</span></div>
+        <p>Номер заказа: <span id="order-number"></span></p>
+        <p style="margin-top: 20px; font-weight: bold;">Чтобы оформить заказ, скиньте фотографию (скриншот) данного чека с номером заказа и содержанием товаров.</p>
+    </div>
+
+    <footer>
+        <p>Все права защищены &copy; Toys3DPrint 2025</p>
+    </footer>
 
     <script>
-        const addToCartButtons = document.querySelectorAll('.add-to-cart');
-        const cartItems = document.getElementById('cart-items');
-        const totalPriceElement = document.getElementById('total-price');
-        let cart = {}; // Объект для хранения товаров в корзине (id товара: количество)
+        let cart = [];
 
-        function updateTotalPrice() {
-            let totalPrice = 0;
-            for (const itemId in cart) {
-                const productCard = document.querySelector(`.product-card[data-id="${itemId}"]`);
-                const price = parseFloat(productCard.dataset.price);
-                const quantity = cart[itemId];
-                totalPrice += price * quantity;
+        function addToCart(name, price) {
+            const existingItem = cart.find(item => item.name === name);
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({ name, price, quantity: 1 });
             }
-            totalPriceElement.textContent = totalPrice.toFixed(2);
+            updateCart();
         }
 
-        function renderCartItem(itemId, quantity) {
-            const productCard = document.querySelector(`.product-card[data-id="${itemId}"]`);
-            const productName = productCard.dataset.name;
-            const productPrice = parseFloat(productCard.dataset.price);
+        function updateCart() {
+            const cartItems = document.getElementById('cart-items');
+            cartItems.innerHTML = '';
+            let total = 0;
 
-            const listItem = document.createElement('li');
-            listItem.dataset.itemId = itemId; // Добавляем data-атрибут для идентификации элемента корзины
-
-            listItem.innerHTML = `
-                <span>${productName} - $${productPrice.toFixed(2)}</span>
-                <div class="quantity-controls">
-                    <button class="decrease-quantity" data-item-id="${itemId}">-</button>
-                    <input type="number" class="quantity-input" data-item-id="${itemId}" value="${quantity}" min="1">
-                    <button class="increase-quantity" data-item-id="${itemId}">+</button>
-                </div>
-            `;
-
-            cartItems.appendChild(listItem);
-        }
-
-        function updateCartItemQuantity(itemId, newQuantity) {
-            const listItem = cartItems.querySelector(`li[data-item-id="${itemId}"]`);
-            if (listItem) {
-                const quantityInput = listItem.querySelector('.quantity-input');
-                quantityInput.value = newQuantity;
-            }
-        }
-
-
-        // Обработчики событий для кнопок добавления в корзину
-        addToCartButtons.forEach(button => {
-            button.addEventListener('click', (event) => {
-                const productCard = event.target.closest('.product-card');
-                const itemId = productCard.dataset.id;
-                if (cart[itemId]) {
-                    cart[itemId]++;
-                    updateCartItemQuantity(itemId, cart[itemId]);
-                } else {
-                    cart[itemId] = 1;
-                    renderCartItem(itemId, 1);
-                }
-                updateTotalPrice();
+            cart.forEach(item => {
+                total += item.price * item.quantity;
+                const itemElement = document.createElement('div');
+                itemElement.className = 'cart-item';
+                itemElement.innerHTML = `
+                    <span>${item.name} - ${item.price} ₽</span>
+                    <input type="number" min="1" value="${item.quantity}" onchange="updateQuantity('${item.name}', this.value)">
+                `;
+                cartItems.appendChild(itemElement);
             });
-        });
 
-        // Делегирование событий для кнопок изменения количества (работает и для новых элементов)
-        cartItems.addEventListener('click', (event) => {
-            const itemId = event.target.dataset.itemId;
+            document.getElementById('total').textContent = `${total} ₽`;
+        }
 
-            if (event.target.classList.contains('decrease-quantity')) {
-                if (cart[itemId] > 1) {
-                    cart[itemId]--;
-                    updateCartItemQuantity(itemId, cart[itemId]);
-                } else {
-                    delete cart[itemId]; // Удаляем товар из корзины, если осталась только одна штука
-                    const listItem = cartItems.querySelector(`li[data-item-id="${itemId}"]`);
-                    if (listItem) {
-                        listItem.remove();
-                    }
+        function updateQuantity(name, quantity) {
+            const item = cart.find(item => item.name === name);
+            if (item) {
+                item.quantity = parseInt(quantity);
+                if (item.quantity <= 0) {
+                    cart = cart.filter(i => i.name !== name);
                 }
-                updateTotalPrice();
+                updateCart();
+            }
+        }
+
+        function openCart() {
+            document.querySelector('.cart').classList.toggle('active');
+        }
+
+        function showCheckout() {
+            if (cart.length === 0) {
+                alert('Корзина пуста!');
+                return;
             }
 
-            if (event.target.classList.contains('increase-quantity')) {
-                cart[itemId]++;
-                updateCartItemQuantity(itemId, cart[itemId]);
-                updateTotalPrice();
-            }
-        });
+            const checkoutItems = document.getElementById('checkout-items');
+            checkoutItems.innerHTML = '';
+            let total = 0;
 
-        // Обработчик события для изменения количества через input
-        cartItems.addEventListener('input', (event) => {
-            if (event.target.classList.contains('quantity-input')) {
-                const itemId = event.target.dataset.itemId;
-                const newQuantity = parseInt(event.target.value);
-                if (newQuantity >= 1) { // Минимальное количество - 1
-                    cart[itemId] = newQuantity;
-                    updateTotalPrice();
-                } else {
-                    // Если введено некорректное значение (меньше 1),
-                    // восстанавливаем предыдущее значение или удаляем товар из корзины
-                    if (cart[itemId] > 1) {
-                        event.target.value = cart[itemId]; // Возвращаем предыдущее значение
-                    } else {
-                        delete cart[itemId];
-                        const listItem = cartItems.querySelector(`li[data-item-id="${itemId}"]`);
-                        if (listItem) {
-                            listItem.remove();
-                        }
-                    }
-                    updateTotalPrice();
-                }
-            }
-        });
+            cart.forEach(item => {
+                total += item.price * item.quantity;
+                const itemElement = document.createElement('div');
+                itemElement.textContent = `${item.name} - ${item.quantity} шт. - ${item.price * item.quantity} ₽`;
+                checkoutItems.appendChild(itemElement);
+            });
 
-
+            document.getElementById('checkout-total').textContent = `${total} ₽`;
+            document.getElementById('order-number').textContent = `№${Math.floor(Math.random() * 1000000)}`;
+            document.querySelector('.checkout').classList.add('active');
+        }
     </script>
-
 </body>
 </html>
