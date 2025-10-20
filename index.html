@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Toys3DPrint</title>
     <style>
+        /* ОСНОВЫ */
         * {
             margin: 0;
             padding: 0;
@@ -17,6 +18,7 @@
             color: #333;
         }
 
+        /* HEADER */
         header {
             background: linear-gradient(135deg, #6e8efb, #a777e3);
             padding: 15px 20px;
@@ -48,7 +50,8 @@
         .nav-links a:hover {
             background-color: rgba(255,255,255,0.2);
         }
-
+        
+        /* ГЛАВНАЯ СТРАНИЦА И ТОВАРЫ */
         .products {
             max-width: 1200px;
             margin: 20px auto;
@@ -58,7 +61,6 @@
             padding: 0 15px;
         }
         
-        /* Секция "Скоро появятся" */
         .coming-soon {
             max-width: 1200px;
             margin: 20px auto 40px;
@@ -92,7 +94,7 @@
         .product-card img {
             width: 100%;
             height: 180px;
-            object-fit: cover; /* Чтобы изображения выглядели хорошо */
+            object-fit: contain; /* Изображение целиком, с сохранением пропорций */
             background: #eee;
             border-radius: 5px;
             margin-bottom: 10px;
@@ -107,29 +109,51 @@
             color: #666;
             margin-bottom: 10px;
         }
+        
+        .card-actions {
+            display: flex;
+            justify-content: space-around;
+            gap: 5px;
+        }
 
-        .product-card button {
+        .card-actions button {
+            flex-grow: 1;
+        }
+        
+        /* КНОПКИ */
+        .product-card button, .details-add-btn {
             background: #6e8efb;
             color: white;
             border: none;
-            padding: 8px 15px;
+            padding: 8px 10px;
             border-radius: 5px;
             cursor: pointer;
             transition: background 0.3s;
+            white-space: nowrap; /* Чтобы текст не переносился */
         }
 
-        .product-card button.added {
+        .product-card button.added, .details-add-btn.added {
             background: #28a745;
         }
 
-        .product-card button:hover {
+        .product-card button:hover, .details-add-btn:hover {
             background: #5a7be0;
         }
 
-        .product-card button.added:hover {
+        .product-card button.added:hover, .details-add-btn.added:hover {
             background: #218838;
         }
+        
+        .description-btn {
+            background: #888;
+        }
+        
+        .description-btn:hover {
+            background: #666;
+        }
 
+
+        /* КОРЗИНА И ЧЕКАУТ (РАСПОЛОЖЕНИЕ) */
         .cart-button {
             position: fixed;
             bottom: 15px;
@@ -148,11 +172,10 @@
             z-index: 1000;
         }
 
-        /* ----- Стили корзины по умолчанию (Мобильные устройства) ----- */
         .cart {
             position: fixed;
             top: 0;
-            right: -100%; /* Скрыта справа */
+            right: -100%; 
             width: 100%;
             max-width: 350px;
             height: 100%;
@@ -166,97 +189,33 @@
         .cart.active {
             right: 0;
         }
-        
-        /* ----- Общие стили для содержимого корзины ----- */
-        .cart h2 {
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .close-btn {
-            cursor: pointer;
-            font-size: 1.5em;
-            color: #666;
-        }
-
-        .cart-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        .cart-item .quantity-controls {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .cart-item .quantity-controls button {
-            background: #ddd;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-            border-radius: 3px;
-        }
-
-        .cart-item .quantity-controls input {
-            width: 40px;
-            text-align: center;
-        }
 
         /* ----- Стили для центрированной корзины на ПК (Desktop) ----- */
         @media (min-width: 900px) {
             .cart {
-                /* Переопределяем позиционирование для центра */
                 right: auto;
                 top: 50%;
                 left: 50%;
                 transform: translate(-50%, -50%);
-                
-                /* Увеличенная ширина и высота не на весь экран */
-                max-width: 500px;
+                max-width: 500px; /* Шире, как просили */
                 height: auto;
-                max-height: 80vh; /* Ограничиваем высоту */
+                max-height: 80vh;
                 border-radius: 10px;
                 overflow-y: auto;
-                
-                /* Отключаем скольжение, используем исчезание/появление */
                 transition: opacity 0.3s, transform 0.3s;
                 opacity: 0;
-                pointer-events: none; /* Скрываем клики, когда неактивно */
+                pointer-events: none; 
             }
 
             .cart.active {
                 opacity: 1;
                 pointer-events: all;
-                /* Центрировано, как и в неактивном состоянии, только видно */
                 transform: translate(-50%, -50%);
             }
         }
         /* ----- Конец стилей ПК корзины ----- */
 
-
-        .cart-total {
-            margin-top: 15px;
-            font-size: 1.1em;
-            font-weight: bold;
-        }
-
-        .checkout-btn {
-            width: 100%;
-            padding: 10px;
-            background: #6e8efb;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 15px;
-        }
-
+        /* ЧЕКАУТ И ПРОЧЕЕ */
         .checkout {
             display: none;
             position: fixed;
@@ -270,65 +229,111 @@
             max-width: 90%;
             width: 400px;
             text-align: center;
-            z-index: 1001; /* Выше корзины */
+            z-index: 1001; 
             animation: popIn 0.3s ease-out;
-        }
-
-        @keyframes popIn {
-            from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
-            to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
         }
 
         .checkout.active {
             display: block;
         }
 
-        .checkout h2 {
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .send-photo-btn {
+        /* ======================================= */
+        /* СТИЛИ ОКНА ОПИСАНИЯ ТОВАРА (МОДАЛЬНОЕ ОКНО) */
+        /* ======================================= */
+        
+        .product-details {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            padding: 10px;
-            background: #28a745;
-            color: white;
-            border: none;
-            border-radius: 5px;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1002; /* Выше всех */
+        }
+
+        .product-details.active {
+            display: flex;
+        }
+
+        .details-content {
+            background: white;
+            border-radius: 10px;
+            max-width: 800px;
+            width: 90%;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            position: relative;
+            display: flex;
+            flex-direction: column; /* По умолчанию для мобильных */
+            gap: 20px;
+            animation: popIn 0.3s ease-out;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .details-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 1.8em;
             cursor: pointer;
-            margin: 15px 0;
+            color: #333;
         }
 
-        @media (max-width: 600px) {
-            header h1 {
-                font-size: 1.5em;
-            }
+        .details-media {
+            flex-basis: 40%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-right: 10px;
+        }
+        
+        .details-text {
+            flex-basis: 60%;
+        }
 
-            .nav-links a {
-                font-size: 0.9em;
-                padding: 6px 10px;
-            }
+        .details-media img {
+            width: 100%;
+            max-height: 300px;
+            object-fit: contain;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
 
-            .products {
-                grid-template-columns: 1fr;
-                padding: 0 10px;
+        .details-text h2 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .details-price {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #ff6b6b;
+            margin-bottom: 15px;
+        }
+        
+        .details-description {
+            line-height: 1.6;
+            color: #555;
+        }
+        
+        /* Десктопное расположение */
+        @media (min-width: 768px) {
+            .details-content {
+                flex-direction: row;
+                height: auto;
+                max-height: 80vh;
             }
-
-            .product-card img {
-                height: 150px;
-            }
-
-            .cart {
-                width: 100%;
-                max-width: none;
-            }
-
-            .checkout {
-                width: 90%;
+            .details-text {
+                padding-left: 20px;
+                border-left: 1px solid #eee;
             }
         }
+        
     </style>
 </head>
 <body>
@@ -341,29 +346,59 @@
     </header>
 
     <main class="products">
+        
+        <!-- ТОВАР 1: ЯЙЦО -->
         <div class="product-card">
-            <!-- Добавлено изображение Яйца -->
             <img src="https://i.postimg.cc/fLnNDXLR/eggtosite.jpg" alt="Яйцо-Головоломка">
             <h3>Яйцо-Головоломка</h3>
             <p>400 ₽</p>
-            <button id="btn-Яйцо-Головоломка" onclick="addToCart('Яйцо-Головоломка', 400)">Добавить в корзину</button>
+            <div class="card-actions">
+                <button 
+                    class="description-btn" 
+                    onclick="showDetails('Яйцо-Головоломка', 400, 'https://i.postimg.cc/fLnNDXLR/eggtosite.jpg', 'ЗАМЕНИТЕ ЭТОТ ТЕКСТ. Это уникальная 3D-печатная головоломка, идеально подходящая для развития мелкой моторики и логического мышления. Изготовлено из прочного и безопасного PLA-пластика.')"
+                >Описание</button>
+                <button id="btn-Яйцо-Головоломка" onclick="addToCart('Яйцо-Головоломка', 400)">Добавить в корзину</button>
+            </div>
         </div>
+
+        <!-- ТОВАР 2: КРЕСТИКИ-НОЛИКИ -->
         <div class="product-card">
-            <!-- Добавлено изображение Крестики-нолики -->
             <img src="https://i.postimg.cc/FsK2tGZp/krestikidlyasaita.jpg" alt="Крестики-нолики">
             <h3>Крестики-нолики</h3>
             <p>600 ₽</p>
-            <button id="btn-Крестики-нолики" onclick="addToCart('Крестики-нолики', 600)">Добавить в корзину</button>
+            <div class="card-actions">
+                <button 
+                    class="description-btn" 
+                    onclick="showDetails('Крестики-нолики', 600, 'https://i.postimg.cc/FsK2tGZp/krestikidlyasaita.jpg', 'ЗАМЕНИТЕ ЭТОТ ТЕКСТ. Классическая игра, выполненная в современном 3D-дизайне. Отличный подарок для детей и взрослых. Легко собирается и разбирается, удобно брать с собой.')"
+                >Описание</button>
+                <button id="btn-Крестики-нолики" onclick="addToCart('Крестики-нолики', 600)">Добавить в корзину</button>
+            </div>
         </div>
     </main>
     
-    <!-- Добавленный блок "Скоро появятся" -->
     <section class="coming-soon">
         <p>Новые игрушки скоро появятся!</p>
     </section>
 
     <div class="cart-button" onclick="openCart()">🛒</div>
+    
+    <!-- МОДАЛЬНОЕ ОКНО ОПИСАНИЯ ТОВАРА -->
+    <div class="product-details" onclick="closeDetailsIfOutside(event)">
+        <div class="details-content">
+            <span class="details-close" onclick="closeDetails()">&times;</span>
+            <div class="details-media">
+                <img id="details-image" src="" alt="">
+                <button id="details-add-btn" class="details-add-btn" onclick=""></button>
+            </div>
+            <div class="details-text">
+                <h2 id="details-name"></h2>
+                <div class="details-price" id="details-price"></div>
+                <div class="details-description" id="details-description"></div>
+            </div>
+        </div>
+    </div>
 
+    <!-- КОРЗИНА -->
     <div class="cart">
         <h2>Корзина <span class="close-btn" onclick="openCart()">✕</span></h2>
         <div id="cart-items"></div>
@@ -371,6 +406,7 @@
         <button class="checkout-btn" onclick="showCheckout()">Оформить заказ</button>
     </div>
 
+    <!-- ЧЕКАУТ -->
     <div class="checkout">
         <h2>Чек заказа <span class="close-btn" onclick="closeCheckout()">✕</span></h2>
         <div id="checkout-items"></div>
@@ -383,6 +419,8 @@
     <script>
         let cart = [];
 
+        // ------------------ ФУНКЦИИ КОРЗИНЫ ------------------
+
         function addToCart(name, price) {
             const existingItem = cart.find(item => item.name === name);
             if (existingItem) {
@@ -394,17 +432,31 @@
             updateButton(name);
         }
 
-        // Обновленная функция, убирающая отображение количества
+        // Обновляет кнопку на главной странице И в окне деталей товара
         function updateButton(name) {
-            const button = document.getElementById(`btn-${name}`);
-            const item = cart.find(item => item.name === name);
-            if (button) {
+            // Кнопка на главной
+            const mainButton = document.getElementById(`btn-${name}`);
+            if (mainButton) {
+                const item = cart.find(item => item.name === name);
                 if (item && item.quantity > 0) {
-                    button.classList.add('added');
-                    button.innerHTML = 'Добавлено в корзину';
+                    mainButton.classList.add('added');
+                    mainButton.innerHTML = 'Добавлено в корзину';
                 } else {
-                    button.classList.remove('added');
-                    button.innerHTML = 'Добавить в корзину';
+                    mainButton.classList.remove('added');
+                    mainButton.innerHTML = 'Добавить в корзину';
+                }
+            }
+            
+            // Кнопка в окне деталей (если оно открыто для этого товара)
+            const detailsButton = document.getElementById('details-add-btn');
+            if (detailsButton && detailsButton.dataset.productName === name) {
+                 const item = cart.find(item => item.name === name);
+                 if (item && item.quantity > 0) {
+                    detailsButton.classList.add('added');
+                    detailsButton.innerHTML = `Добавлено (${item.quantity} шт.)`;
+                } else {
+                    detailsButton.classList.remove('added');
+                    detailsButton.innerHTML = `Добавить в корзину`;
                 }
             }
         }
@@ -416,13 +468,12 @@
 
             if (cart.length === 0) {
                 cartItems.innerHTML = '<p style="text-align: center; margin-top: 20px;">Корзина пуста.</p>';
+                document.querySelector('.checkout-btn').disabled = true;
+            } else {
+                document.querySelector('.checkout-btn').disabled = false;
             }
 
-            // Создаем массив имен товаров, которые присутствуют, чтобы позже обновить только их кнопки
-            const existingProductNames = [];
-
             cart.forEach(item => {
-                existingProductNames.push(item.name);
                 total += item.price * item.quantity;
                 const itemElement = document.createElement('div');
                 itemElement.className = 'cart-item';
@@ -436,13 +487,16 @@
                     </div>
                 `;
                 cartItems.appendChild(itemElement);
-                updateButton(item.name); // Обновляем кнопки для существующих товаров
+                updateButton(item.name); // Обновляем состояние кнопок
             });
 
             document.getElementById('total').textContent = `${total} ₽`;
             
-            // Если у нас больше товаров, чем в корзине (например, если мы удалили что-то), 
-            // мы должны явно проверить все кнопки, но поскольку тут всего 2 товара, это не так критично.
+            // Обновляем кнопку в окне деталей, если оно открыто
+            const detailsName = document.getElementById('details-add-btn').dataset.productName;
+            if (detailsName) {
+                updateButton(detailsName);
+            }
         }
 
         function updateQuantity(name, quantity) {
@@ -460,7 +514,7 @@
         function deleteItem(name) {
             cart = cart.filter(item => item.name !== name);
             updateCart();
-            // Явно вызываем updateButton для удаленного элемента, чтобы сбросить его состояние
+            // Явно сбрасываем состояние кнопки на "Добавить в корзину"
             updateButton(name); 
         }
 
@@ -468,13 +522,46 @@
             document.querySelector('.cart').classList.toggle('active');
         }
 
+        // ------------------ ФУНКЦИИ ОПИСАНИЯ ТОВАРА ------------------
+
+        function showDetails(name, price, imageSrc, description) {
+            document.getElementById('details-name').textContent = name;
+            document.getElementById('details-price').textContent = `${price} ₽`;
+            document.getElementById('details-image').src = imageSrc;
+            document.getElementById('details-image').alt = name;
+            document.getElementById('details-description').innerHTML = description;
+            
+            const detailsBtn = document.getElementById('details-add-btn');
+            detailsBtn.onclick = () => addToCart(name, price);
+            
+            // Сохраняем имя товара для обновления кнопки из корзины
+            detailsBtn.dataset.productName = name; 
+            
+            // Обновляем состояние кнопки "Добавить в корзину" внутри модалки
+            updateButton(name); 
+
+            document.querySelector('.product-details').classList.add('active');
+        }
+
+        function closeDetails() {
+            document.querySelector('.product-details').classList.remove('active');
+            document.getElementById('details-add-btn').dataset.productName = ''; // Очищаем данные
+        }
+
+        function closeDetailsIfOutside(event) {
+            if (event.target.classList.contains('product-details')) {
+                closeDetails();
+            }
+        }
+
+        // ------------------ ФУНКЦИИ ЧЕКАУТА ------------------
+
         function showCheckout() {
             if (cart.length === 0) {
                 alert('Корзина пуста!');
                 return;
             }
             
-            // Закрываем боковую корзину перед показом чекаута
             document.querySelector('.cart').classList.remove('active');
 
             const checkoutItems = document.getElementById('checkout-items');
@@ -496,6 +583,9 @@
         function closeCheckout() {
             document.querySelector('.checkout').classList.remove('active');
         }
+
+        // Инициализация при загрузке
+        updateCart(); 
     </script>
 </body>
 </html>
