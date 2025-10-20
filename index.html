@@ -57,6 +57,17 @@
             gap: 15px;
             padding: 0 15px;
         }
+        
+        /* Секция "Скоро появятся" */
+        .coming-soon {
+            max-width: 1200px;
+            margin: 20px auto 40px;
+            text-align: center;
+            padding: 20px;
+            font-size: 1.2em;
+            color: #555;
+            border-top: 1px solid #ddd;
+        }
 
         .product-card {
             background: white;
@@ -81,6 +92,7 @@
         .product-card img {
             width: 100%;
             height: 180px;
+            object-fit: cover; /* Чтобы изображения выглядели хорошо */
             background: #eee;
             border-radius: 5px;
             margin-bottom: 10px;
@@ -136,10 +148,11 @@
             z-index: 1000;
         }
 
+        /* ----- Стили корзины по умолчанию (Мобильные устройства) ----- */
         .cart {
             position: fixed;
             top: 0;
-            right: -100%;
+            right: -100%; /* Скрыта справа */
             width: 100%;
             max-width: 350px;
             height: 100%;
@@ -148,27 +161,13 @@
             padding: 15px;
             transition: right 0.3s ease-in-out;
             z-index: 1000;
-            animation: slideIn 0.3s ease-out forwards;
-        }
-
-        @keyframes slideIn {
-            from { right: -100%; }
-            to { right: 0; }
         }
 
         .cart.active {
             right: 0;
         }
-
-        .cart:not(.active) {
-            animation: slideOut 0.3s ease-out forwards;
-        }
-
-        @keyframes slideOut {
-            from { right: 0; }
-            to { right: -100%; }
-        }
-
+        
+        /* ----- Общие стили для содержимого корзины ----- */
         .cart h2 {
             margin-bottom: 15px;
             display: flex;
@@ -204,22 +203,42 @@
             border-radius: 3px;
         }
 
-        .cart-item .quantity-controls button:hover {
-            background: #ccc;
+        .cart-item .quantity-controls input {
+            width: 40px;
+            text-align: center;
         }
 
-        .cart-item .delete-btn {
-            background: #ff4444;
-            color: white;
-            border: none;
-            padding: 5px;
-            cursor: pointer;
-            border-radius: 3px;
-        }
+        /* ----- Стили для центрированной корзины на ПК (Desktop) ----- */
+        @media (min-width: 900px) {
+            .cart {
+                /* Переопределяем позиционирование для центра */
+                right: auto;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                
+                /* Увеличенная ширина и высота не на весь экран */
+                max-width: 500px;
+                height: auto;
+                max-height: 80vh; /* Ограничиваем высоту */
+                border-radius: 10px;
+                overflow-y: auto;
+                
+                /* Отключаем скольжение, используем исчезание/появление */
+                transition: opacity 0.3s, transform 0.3s;
+                opacity: 0;
+                pointer-events: none; /* Скрываем клики, когда неактивно */
+            }
 
-        .cart-item .delete-btn:hover {
-            background: #cc0000;
+            .cart.active {
+                opacity: 1;
+                pointer-events: all;
+                /* Центрировано, как и в неактивном состоянии, только видно */
+                transform: translate(-50%, -50%);
+            }
         }
+        /* ----- Конец стилей ПК корзины ----- */
+
 
         .cart-total {
             margin-top: 15px;
@@ -251,7 +270,7 @@
             max-width: 90%;
             width: 400px;
             text-align: center;
-            z-index: 1000;
+            z-index: 1001; /* Выше корзины */
             animation: popIn 0.3s ease-out;
         }
 
@@ -323,18 +342,25 @@
 
     <main class="products">
         <div class="product-card">
-            <img src="#" alt="Яйцо-Головоломка">
+            <!-- Добавлено изображение Яйца -->
+            <img src="https://i.postimg.cc/fLnNDXLR/eggtosite.jpg" alt="Яйцо-Головоломка">
             <h3>Яйцо-Головоломка</h3>
             <p>400 ₽</p>
             <button id="btn-Яйцо-Головоломка" onclick="addToCart('Яйцо-Головоломка', 400)">Добавить в корзину</button>
         </div>
         <div class="product-card">
-            <img src="#" alt="Крестики-нолики">
+            <!-- Добавлено изображение Крестики-нолики -->
+            <img src="https://i.postimg.cc/FsK2tGZp/krestikidlyasaita.jpg" alt="Крестики-нолики">
             <h3>Крестики-нолики</h3>
             <p>600 ₽</p>
             <button id="btn-Крестики-нолики" onclick="addToCart('Крестики-нолики', 600)">Добавить в корзину</button>
         </div>
     </main>
+    
+    <!-- Добавленный блок "Скоро появятся" -->
+    <section class="coming-soon">
+        <p>Новые игрушки скоро появятся!</p>
+    </section>
 
     <div class="cart-button" onclick="openCart()">🛒</div>
 
@@ -368,15 +394,18 @@
             updateButton(name);
         }
 
+        // Обновленная функция, убирающая отображение количества
         function updateButton(name) {
             const button = document.getElementById(`btn-${name}`);
             const item = cart.find(item => item.name === name);
-            if (item && item.quantity > 0) {
-                button.classList.add('added');
-                button.innerHTML = `Добавлено в корзину &lt; ${item.quantity} &gt;`;
-            } else {
-                button.classList.remove('added');
-                button.innerHTML = 'Добавить в корзину';
+            if (button) {
+                if (item && item.quantity > 0) {
+                    button.classList.add('added');
+                    button.innerHTML = 'Добавлено в корзину';
+                } else {
+                    button.classList.remove('added');
+                    button.innerHTML = 'Добавить в корзину';
+                }
             }
         }
 
@@ -385,31 +414,42 @@
             cartItems.innerHTML = '';
             let total = 0;
 
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p style="text-align: center; margin-top: 20px;">Корзина пуста.</p>';
+            }
+
+            // Создаем массив имен товаров, которые присутствуют, чтобы позже обновить только их кнопки
+            const existingProductNames = [];
+
             cart.forEach(item => {
+                existingProductNames.push(item.name);
                 total += item.price * item.quantity;
                 const itemElement = document.createElement('div');
                 itemElement.className = 'cart-item';
                 itemElement.innerHTML = `
-                    <span>${item.name} - ${item.price} ₽</span>
+                    <span style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${item.name} - ${item.price} ₽</span>
                     <div class="quantity-controls">
-                        <button onclick="updateQuantity('${item.name}', ${item.quantity - 1})">&lt;</button>
+                        <button onclick="updateQuantity('${item.name}', ${item.quantity - 1})">&minus;</button>
                         <input type="number" min="1" value="${item.quantity}" onchange="updateQuantity('${item.name}', this.value)">
-                        <button onclick="updateQuantity('${item.name}', ${item.quantity + 1})">&gt;</button>
+                        <button onclick="updateQuantity('${item.name}', ${item.quantity + 1})">&plus;</button>
                         <button class="delete-btn" onclick="deleteItem('${item.name}')">🗑</button>
                     </div>
                 `;
                 cartItems.appendChild(itemElement);
+                updateButton(item.name); // Обновляем кнопки для существующих товаров
             });
 
             document.getElementById('total').textContent = `${total} ₽`;
-            cart.forEach(item => updateButton(item.name));
+            
+            // Если у нас больше товаров, чем в корзине (например, если мы удалили что-то), 
+            // мы должны явно проверить все кнопки, но поскольку тут всего 2 товара, это не так критично.
         }
 
         function updateQuantity(name, quantity) {
             const item = cart.find(item => item.name === name);
             if (item) {
                 item.quantity = parseInt(quantity);
-                if (item.quantity <= 0) {
+                if (item.quantity <= 0 || isNaN(item.quantity)) {
                     deleteItem(name);
                 } else {
                     updateCart();
@@ -420,6 +460,8 @@
         function deleteItem(name) {
             cart = cart.filter(item => item.name !== name);
             updateCart();
+            // Явно вызываем updateButton для удаленного элемента, чтобы сбросить его состояние
+            updateButton(name); 
         }
 
         function openCart() {
@@ -431,6 +473,9 @@
                 alert('Корзина пуста!');
                 return;
             }
+            
+            // Закрываем боковую корзину перед показом чекаута
+            document.querySelector('.cart').classList.remove('active');
 
             const checkoutItems = document.getElementById('checkout-items');
             checkoutItems.innerHTML = '';
