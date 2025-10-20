@@ -94,7 +94,7 @@
         .product-card img {
             width: 100%;
             height: 180px;
-            object-fit: contain; /* Изображение целиком, с сохранением пропорций */
+            object-fit: contain; 
             background: #eee;
             border-radius: 5px;
             margin-bottom: 10px;
@@ -120,7 +120,7 @@
             flex-grow: 1;
         }
         
-        /* КНОПКИ */
+        /* ГЛАВНЫЕ КНОПКИ (ДОБАВИТЬ/ОПИСАНИЕ/ВНУТРИ ДЕТАЛЕЙ) */
         .product-card button, .details-add-btn {
             background: #6e8efb;
             color: white;
@@ -129,7 +129,7 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background 0.3s;
-            white-space: nowrap; /* Чтобы текст не переносился */
+            white-space: nowrap; 
         }
 
         .product-card button.added, .details-add-btn.added {
@@ -153,7 +153,7 @@
         }
 
 
-        /* КОРЗИНА И ЧЕКАУТ (РАСПОЛОЖЕНИЕ) */
+        /* КОРЗИНА (РАСПОЛОЖЕНИЕ) */
         .cart-button {
             position: fixed;
             bottom: 15px;
@@ -184,6 +184,13 @@
             padding: 15px;
             transition: right 0.3s ease-in-out;
             z-index: 1000;
+            display: flex; /* Для корректного позиционирования содержимого */
+            flex-direction: column;
+        }
+        
+        #cart-items {
+            flex-grow: 1; /* Позволяет списку товаров занимать все доступное место */
+            overflow-y: auto;
         }
 
         .cart.active {
@@ -197,11 +204,10 @@
                 top: 50%;
                 left: 50%;
                 transform: translate(-50%, -50%);
-                max-width: 500px; /* Шире, как просили */
+                max-width: 500px; 
                 height: auto;
                 max-height: 80vh;
                 border-radius: 10px;
-                overflow-y: auto;
                 transition: opacity 0.3s, transform 0.3s;
                 opacity: 0;
                 pointer-events: none; 
@@ -214,8 +220,97 @@
             }
         }
         /* ----- Конец стилей ПК корзины ----- */
+        
+        /* СТИЛИ ЭЛЕМЕНТОВ ВНУТРИ КОРЗИНЫ */
+        
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0; /* Увеличили вертикальный отступ */
+            border-bottom: 1px solid #eee;
+            gap: 10px; /* Отступ между названием и элементами управления */
+        }
+        
+        .cart-item span {
+            flex-shrink: 1; /* Позволяет тексту уменьшаться */
+            margin-right: 5px; /* Добавили отступ */
+            /* Настройки для предотвращения слишком длинных названий */
+            max-width: 40%; 
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
-        /* ЧЕКАУТ И ПРОЧЕЕ */
+        .cart-item .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            flex-shrink: 0; /* Не позволяет элементам управления сжиматься */
+        }
+        
+        /* ВОССТАНОВЛЕНИЕ СТИЛЕЙ КНОПОК КОЛИЧЕСТВА В КОРЗИНЕ */
+        .cart-item .quantity-controls button {
+            /* Переопределяем стили, которые могли быть наследованы от главных кнопок */
+            background: #ddd; 
+            color: #333;
+            border: none;
+            padding: 5px 8px; /* Скорректирован размер */
+            cursor: pointer;
+            border-radius: 3px;
+            transition: background 0.2s;
+            line-height: 1; /* Фиксируем высоту */
+        }
+
+        .cart-item .quantity-controls button:hover {
+            background: #ccc;
+        }
+        
+        /* Стили для инпута количества */
+        .cart-item .quantity-controls input {
+            width: 35px;
+            text-align: center;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            padding: 5px 0;
+        }
+
+        .cart-item .delete-btn {
+            background: #ff4444;
+            color: white;
+            border: none;
+            padding: 5px;
+            cursor: pointer;
+            border-radius: 3px;
+            margin-left: 5px;
+        }
+
+        .cart-item .delete-btn:hover {
+            background: #cc0000;
+        }
+        /* КОНЕЦ СТИЛЕЙ ЭЛЕМЕНТОВ КОРЗИНЫ */
+
+
+        .cart-total {
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 10px;
+            background: #6e8efb;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        
+        /* ЧЕКАУТ И МОДАЛЬНОЕ ОКНО ОПИСАНИЯ */
         .checkout {
             display: none;
             position: fixed;
@@ -236,11 +331,8 @@
         .checkout.active {
             display: block;
         }
-
-        /* ======================================= */
-        /* СТИЛИ ОКНА ОПИСАНИЯ ТОВАРА (МОДАЛЬНОЕ ОКНО) */
-        /* ======================================= */
         
+        /* Стили для модального окна описания (без изменений) */
         .product-details {
             position: fixed;
             top: 0;
@@ -251,7 +343,7 @@
             display: none;
             justify-content: center;
             align-items: center;
-            z-index: 1002; /* Выше всех */
+            z-index: 1002; 
         }
 
         .product-details.active {
@@ -267,9 +359,8 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.5);
             position: relative;
             display: flex;
-            flex-direction: column; /* По умолчанию для мобильных */
+            flex-direction: column; 
             gap: 20px;
-            animation: popIn 0.3s ease-out;
             max-height: 90vh;
             overflow-y: auto;
         }
@@ -303,25 +394,7 @@
             border: 1px solid #ddd;
             border-radius: 5px;
         }
-
-        .details-text h2 {
-            font-size: 2em;
-            margin-bottom: 10px;
-        }
         
-        .details-price {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: #ff6b6b;
-            margin-bottom: 15px;
-        }
-        
-        .details-description {
-            line-height: 1.6;
-            color: #555;
-        }
-        
-        /* Десктопное расположение */
         @media (min-width: 768px) {
             .details-content {
                 flex-direction: row;
@@ -333,7 +406,10 @@
                 border-left: 1px solid #eee;
             }
         }
-        
+
+        @media (max-width: 600px) {
+            /* ... (мобильные стили) ... */
+        }
     </style>
 </head>
 <body>
@@ -432,12 +508,12 @@
             updateButton(name);
         }
 
-        // Обновляет кнопку на главной странице И в окне деталей товара
         function updateButton(name) {
             // Кнопка на главной
             const mainButton = document.getElementById(`btn-${name}`);
+            const item = cart.find(item => item.name === name);
+            
             if (mainButton) {
-                const item = cart.find(item => item.name === name);
                 if (item && item.quantity > 0) {
                     mainButton.classList.add('added');
                     mainButton.innerHTML = 'Добавлено в корзину';
@@ -447,10 +523,9 @@
                 }
             }
             
-            // Кнопка в окне деталей (если оно открыто для этого товара)
+            // Кнопка в окне деталей
             const detailsButton = document.getElementById('details-add-btn');
             if (detailsButton && detailsButton.dataset.productName === name) {
-                 const item = cart.find(item => item.name === name);
                  if (item && item.quantity > 0) {
                     detailsButton.classList.add('added');
                     detailsButton.innerHTML = `Добавлено (${item.quantity} шт.)`;
@@ -477,8 +552,10 @@
                 total += item.price * item.quantity;
                 const itemElement = document.createElement('div');
                 itemElement.className = 'cart-item';
+                // Важно: в спане удален style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" 
+                // и перенесен в CSS для более чистого кода.
                 itemElement.innerHTML = `
-                    <span style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${item.name} - ${item.price} ₽</span>
+                    <span>${item.name} - ${item.price} ₽</span>
                     <div class="quantity-controls">
                         <button onclick="updateQuantity('${item.name}', ${item.quantity - 1})">&minus;</button>
                         <input type="number" min="1" value="${item.quantity}" onchange="updateQuantity('${item.name}', this.value)">
@@ -487,12 +564,11 @@
                     </div>
                 `;
                 cartItems.appendChild(itemElement);
-                updateButton(item.name); // Обновляем состояние кнопок
+                updateButton(item.name); 
             });
 
             document.getElementById('total').textContent = `${total} ₽`;
             
-            // Обновляем кнопку в окне деталей, если оно открыто
             const detailsName = document.getElementById('details-add-btn').dataset.productName;
             if (detailsName) {
                 updateButton(detailsName);
@@ -514,7 +590,6 @@
         function deleteItem(name) {
             cart = cart.filter(item => item.name !== name);
             updateCart();
-            // Явно сбрасываем состояние кнопки на "Добавить в корзину"
             updateButton(name); 
         }
 
@@ -534,10 +609,8 @@
             const detailsBtn = document.getElementById('details-add-btn');
             detailsBtn.onclick = () => addToCart(name, price);
             
-            // Сохраняем имя товара для обновления кнопки из корзины
             detailsBtn.dataset.productName = name; 
             
-            // Обновляем состояние кнопки "Добавить в корзину" внутри модалки
             updateButton(name); 
 
             document.querySelector('.product-details').classList.add('active');
@@ -545,7 +618,7 @@
 
         function closeDetails() {
             document.querySelector('.product-details').classList.remove('active');
-            document.getElementById('details-add-btn').dataset.productName = ''; // Очищаем данные
+            document.getElementById('details-add-btn').dataset.productName = ''; 
         }
 
         function closeDetailsIfOutside(event) {
