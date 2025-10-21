@@ -102,7 +102,7 @@
         .coming-soon {
             max-width: 1200px;
             margin: 20px auto 40px;
-            text-align: center; /* Восстанавливаем центрирование */
+            text-align: center; 
             padding: 20px;
             font-size: 1.2em;
             color: #555;
@@ -134,9 +134,9 @@
             gap: 5px;
         }
         
-        /* ВОССТАНОВЛЕНИЕ СТИЛЕЙ КНОПОК ТОВАРОВ */
+        /* СТИЛИ КНОПОК ТОВАРОВ */
         .product-card button, .details-add-btn {
-            background: #6e8efb; /* Цвет восстановлен */
+            background: #6e8efb; 
             color: white;
             border: none;
             padding: 8px 10px;
@@ -144,7 +144,6 @@
             cursor: pointer;
             transition: background 0.3s;
             white-space: nowrap; 
-            /* Важно: эти стили не должны влиять на кнопки внутри .cart-item */
         }
         
         .product-card button.added, .details-add-btn.added { background: #28a745; }
@@ -191,8 +190,7 @@
         
         .cart.active { right: 0; }
 
-        /* СТИЛИ ЭЛЕМЕНТОВ ВНУТРИ КОРЗИНЫ (ПОВТОРНОЕ ВОССТАНОВЛЕНИЕ) */
-        
+        /* СТИЛИ ЭЛЕМЕНТОВ ВНУТРИ КОРЗИНЫ */
         .cart-item {
             display: flex;
             justify-content: space-between;
@@ -219,7 +217,6 @@
         }
         
         .cart-item .quantity-controls button {
-            /* ВОССТАНОВЛЕНИЕ ЦВЕТА И ВИДА КНОПОК +/- */
             background: #ddd; 
             color: #333;
             border: none;
@@ -228,7 +225,6 @@
             border-radius: 3px;
             transition: background 0.2s;
             line-height: 1; 
-            /* Переопределяем стили от .product-card button */
             width: auto; 
         }
 
@@ -236,16 +232,7 @@
             background: #ccc;
         }
         
-        .cart-item .quantity-controls input {
-            width: 35px;
-            text-align: center;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            padding: 5px 0;
-        }
-
         .cart-item .delete-btn {
-            /* ВОССТАНОВЛЕНИЕ ЦВЕТА КНОПКИ УДАЛЕНИЯ */
             background: #ff4444;
             color: white;
             border: none;
@@ -255,32 +242,7 @@
             margin-left: 5px;
         }
 
-        .cart-item .delete-btn:hover {
-            background: #cc0000;
-        }
-        /* КОНЕЦ СТИЛЕЙ КОРЗИНЫ */
-
-
-        .cart-total {
-            margin-top: 15px;
-            padding-top: 10px;
-            border-top: 1px solid #eee;
-            font-size: 1.1em;
-            font-weight: bold;
-        }
-
-        .checkout-btn {
-            width: 100%;
-            padding: 10px;
-            background: #6e8efb;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 15px;
-        }
-        
-        /* ЧЕКАУТ (Проверен Z-index) */
+        /* ЧЕКАУТ */
         .checkout {
             display: none;
             position: fixed;
@@ -294,7 +256,7 @@
             max-width: 90%;
             width: 400px;
             text-align: center;
-            z-index: 1011; /* Увеличили Z-index, чтобы быть выше всех модалок */
+            z-index: 1011; 
             animation: popIn 0.3s ease-out;
         }
 
@@ -302,7 +264,7 @@
             display: block;
         }
         
-        /* ОКНО ОПИСАНИЯ (Проверен Z-index) */
+        /* ОКНО ОПИСАНИЯ - ИСПРАВЛЕНЫ СТИЛИ ВИДИМОСТИ */
         .product-details {
             position: fixed;
             top: 0;
@@ -310,32 +272,42 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.7);
-            display: none;
+            display: none; /* Скрыто по умолчанию */
             justify-content: center;
             align-items: center;
             z-index: 1002; 
         }
 
+        .product-details.active {
+            display: flex; /* Отображается при активации */
+        }
+        
+        /* Стили содержимого окна описания */
+        .details-content {
+            background: white;
+            border-radius: 10px;
+            max-width: 800px;
+            width: 90%;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            position: relative;
+            display: flex;
+            flex-direction: column; 
+            gap: 20px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        /* ... (другие стили модального окна) ... */
+
         @media (min-width: 900px) {
-            .cart {
-                max-width: 600px; 
-                /* ... (центровка ПК корзины) ... */
-            }
+            .cart { max-width: 600px; }
+            .details-content { flex-direction: row; }
         }
         
         @media (max-width: 600px) {
-            header {
-                flex-direction: column;
-                padding: 15px 10px;
-            }
-            header h1 {
-                text-align: center;
-                margin-bottom: 10px;
-            }
-            .nav-links {
-                justify-content: space-around;
-                width: 100%;
-            }
+            header { flex-direction: column; padding: 15px 10px; }
+            header h1 { text-align: center; margin-bottom: 10px; }
+            .nav-links { justify-content: space-around; width: 100%; }
         }
     </style>
 </head>
