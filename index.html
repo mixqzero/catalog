@@ -15,7 +15,6 @@
         
         /* АНИМИРОВАННЫЙ ФОН САЙТА */
         body {
-            /* Базовые цвета градиента (Зеленый -> Синий) */
             background: linear-gradient(135deg, #a8ff78, #78ffd6, #6e8efb, #a777e3);
             background-size: 400% 400%;
             animation: backgroundGradient 15s ease infinite;
@@ -28,15 +27,14 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* HEADER - ПЕРЕМЕЩЕНИЕ ЭЛЕМЕНТОВ */
+        /* HEADER */
         header {
-            background: rgba(0, 0, 0, 0.8); /* Сделал чуть темнее для лучшего контраста */
+            background: rgba(0, 0, 0, 0.8);
             padding: 15px 30px; 
             box-shadow: 0 2px 5px rgba(0,0,0,0.4);
             display: flex; 
             justify-content: space-between; 
             align-items: center;
-            /* Важно: Sticky header, чтобы навигация была всегда сверху */
             position: sticky; 
             top: 0;
             z-index: 999;
@@ -68,7 +66,6 @@
         }
         
         /* РАДУЖНЫЙ ТЕКСТ */
-        
         .limited-edition {
             display: block;
             font-size: 0.7em;
@@ -102,6 +99,16 @@
             padding: 0 15px;
         }
         
+        .coming-soon {
+            max-width: 1200px;
+            margin: 20px auto 40px;
+            text-align: center; /* Восстанавливаем центрирование */
+            padding: 20px;
+            font-size: 1.2em;
+            color: #555;
+            border-top: 1px solid #ddd;
+        }
+
         .product-card {
             background: white; 
             border-radius: 10px;
@@ -110,11 +117,6 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             animation: fadeIn 0.5s ease-out;
             transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
         }
 
         .product-card img {
@@ -132,9 +134,28 @@
             gap: 5px;
         }
         
-        /* ПЛАВАЮЩАЯ КНОПКА КОРЗИНЫ - ИСПРАВЛЕНО */
+        /* ВОССТАНОВЛЕНИЕ СТИЛЕЙ КНОПОК ТОВАРОВ */
+        .product-card button, .details-add-btn {
+            background: #6e8efb; /* Цвет восстановлен */
+            color: white;
+            border: none;
+            padding: 8px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+            white-space: nowrap; 
+            /* Важно: эти стили не должны влиять на кнопки внутри .cart-item */
+        }
+        
+        .product-card button.added, .details-add-btn.added { background: #28a745; }
+        .product-card button:hover, .details-add-btn:hover { background: #5a7be0; }
+        .product-card button.added:hover, .details-add-btn.added:hover { background: #218838; }
+        .description-btn { background: #888; }
+        .description-btn:hover { background: #666; }
+
+        /* ПЛАВАЮЩАЯ КНОПКА КОРЗИНЫ */
         .cart-button {
-            position: fixed; /* Обязательно fixed */
+            position: fixed; 
             bottom: 15px;
             right: 15px;
             background: #ff6b6b;
@@ -145,15 +166,15 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.5); /* Немного темнее тень */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5); 
             cursor: pointer;
             font-size: 1.3em;
-            z-index: 1010; /* Увеличенный z-index, чтобы быть над всем */
+            z-index: 1010; 
         }
 
         /* ОКНО КОРЗИНЫ */
         .cart {
-            position: fixed; /* Обязательно fixed */
+            position: fixed;
             top: 0;
             right: -100%; 
             width: 100%;
@@ -168,42 +189,140 @@
             flex-direction: column;
         }
         
-        .cart.active {
-            right: 0;
+        .cart.active { right: 0; }
+
+        /* СТИЛИ ЭЛЕМЕНТОВ ВНУТРИ КОРЗИНЫ (ПОВТОРНОЕ ВОССТАНОВЛЕНИЕ) */
+        
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0; 
+            border-bottom: 1px solid #eee;
+            gap: 10px; 
+        }
+        
+        .cart-item span {
+            flex-shrink: 1; 
+            margin-right: 5px; 
+            max-width: 40%; 
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
-        /* ----- Стили для центрированной корзины на ПК (Desktop) ----- */
+        .cart-item .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            flex-shrink: 0; 
+        }
+        
+        .cart-item .quantity-controls button {
+            /* ВОССТАНОВЛЕНИЕ ЦВЕТА И ВИДА КНОПОК +/- */
+            background: #ddd; 
+            color: #333;
+            border: none;
+            padding: 5px 8px; 
+            cursor: pointer;
+            border-radius: 3px;
+            transition: background 0.2s;
+            line-height: 1; 
+            /* Переопределяем стили от .product-card button */
+            width: auto; 
+        }
+
+        .cart-item .quantity-controls button:hover {
+            background: #ccc;
+        }
+        
+        .cart-item .quantity-controls input {
+            width: 35px;
+            text-align: center;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            padding: 5px 0;
+        }
+
+        .cart-item .delete-btn {
+            /* ВОССТАНОВЛЕНИЕ ЦВЕТА КНОПКИ УДАЛЕНИЯ */
+            background: #ff4444;
+            color: white;
+            border: none;
+            padding: 5px;
+            cursor: pointer;
+            border-radius: 3px;
+            margin-left: 5px;
+        }
+
+        .cart-item .delete-btn:hover {
+            background: #cc0000;
+        }
+        /* КОНЕЦ СТИЛЕЙ КОРЗИНЫ */
+
+
+        .cart-total {
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 10px;
+            background: #6e8efb;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        
+        /* ЧЕКАУТ (Проверен Z-index) */
+        .checkout {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+            max-width: 90%;
+            width: 400px;
+            text-align: center;
+            z-index: 1011; /* Увеличили Z-index, чтобы быть выше всех модалок */
+            animation: popIn 0.3s ease-out;
+        }
+
+        .checkout.active {
+            display: block;
+        }
+        
+        /* ОКНО ОПИСАНИЯ (Проверен Z-index) */
+        .product-details {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1002; 
+        }
+
         @media (min-width: 900px) {
             .cart {
-                right: auto;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
                 max-width: 600px; 
-                height: auto;
-                max-height: 80vh;
-                border-radius: 10px;
-                transition: opacity 0.3s, transform 0.3s;
-                opacity: 0;
-                pointer-events: none; 
-            }
-
-            .cart.active {
-                opacity: 1;
-                pointer-events: all;
-                transform: translate(-50%, -50%);
+                /* ... (центровка ПК корзины) ... */
             }
         }
-        /* ----- Конец стилей ПК корзины ----- */
         
-        /* ЧЕКАУТ И МОДАЛЬНОЕ ОКНО ОПИСАНИЯ */
-        .checkout {
-            /* ... (z-index 1001) ... */
-        }
-        .product-details {
-            /* ... (z-index 1002) ... */
-        }
-
         @media (max-width: 600px) {
             header {
                 flex-direction: column;
@@ -323,7 +442,18 @@
     
     <!-- МОДАЛЬНОЕ ОКНО ОПИСАНИЯ ТОВАРА -->
     <div class="product-details" onclick="closeDetailsIfOutside(event)">
-        <!-- ... -->
+        <div class="details-content">
+            <span class="details-close" onclick="closeDetails()">&times;</span>
+            <div class="details-media">
+                <img id="details-image" src="" alt="">
+                <button id="details-add-btn" class="details-add-btn" onclick=""></button>
+            </div>
+            <div class="details-text">
+                <h2 id="details-name"></h2>
+                <div class="details-price" id="details-price"></div>
+                <div class="details-description" id="details-description"></div>
+            </div>
+        </div>
     </div>
 
     <!-- КОРЗИНА -->
@@ -336,13 +466,16 @@
 
     <!-- ЧЕКАУТ -->
     <div class="checkout">
-        <!-- ... -->
+        <h2>Чек заказа <span class="close-btn" onclick="closeCheckout()">✕</span></h2>
+        <div id="checkout-items"></div>
+        <div class="cart-total">Итого: <span id="checkout-total">0 ₽</span></div>
+        <p>Номер заказа: <span id="order-number"></span></p>
+        <button class="send-photo-btn">Отправить фотографию</button>
+        <p style="margin-top: 10px; font-weight: bold;">При сделанном скриншоте чека заказа, нажмите на кнопку сверху и отправьте скриншот в личные сообщения продавца. После с вами свяжется продавец.</p>
     </div>
 
     <script>
         let cart = [];
-
-        // ... (JavaScript остается без изменений) ...
 
         function addToCart(name, price) {
             const existingItem = cart.find(item => item.name === name);
